@@ -1,53 +1,19 @@
-node_modules/
-dist/
 .env
-*.tsbuildinfo
-drizzle/meta/
-.vite/
-coverage/
-.DS_Store
-data/
-.paperclip/
+.env.local
+.env.*.local
+node_modules/
 .pnpm-store/
-tmp-*
-cli/tmp/
-
-# Scratch/seed scripts (but not scripts/ dir)
-check-*.mjs
-!scripts/check-*.mjs
-new-agent*.json
-newcompany.json
-seed-*.mjs
-server/check-*.mjs
-server/seed-*.mjs
-packages/db/seed-*.mjs
-
-# npm publish build artifacts
-cli/package.dev.json
-
-# Build artifacts in src directories
-server/src/**/*.js
-server/src/**/*.js.map
-server/src/**/*.d.ts
-server/src/**/*.d.ts.map
+dist/
+build/
+coverage/
+*.log
+.paperclip/
+.hermes/
 tmp/
-feedback-export-*
-
-# Editor / tool temp files
-*.tmp
+data/
+volumes/
+*.sqlite
+*.db
+.DS_Store
 .vscode/
-.claude/settings.local.json
-.paperclip-local/
-/.idea/
-/.agents/
-
-# Doc maintenance cursor
-.doc-review-cursor
-
-# Playwright
-tests/e2e/test-results/
-tests/e2e/playwright-report/
-tests/release-smoke/test-results/
-tests/release-smoke/playwright-report/
-.superset/
-.claude/worktrees/
+.idea/

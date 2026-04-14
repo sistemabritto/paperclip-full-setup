@@ -1,0 +1,48 @@
+services:
+  paperclip:
+    image: paperclip-local:latest
+    networks:
+      - internal_network
+    ports:
+      - "3100:3100"
+    environment:
+      HOST: "0.0.0.0"
+      DATABASE_URL: "postgres://paperclip:paperclip_secure_pass_2026@postgres_postgres:5432/paperclip_db"
+      PAPERCLIP_HOME: "/paperclip"
+      PAPERCLIP_DEPLOYMENT_MODE: "authenticated"
+      PAPERCLIP_DEPLOYMENT_EXPOSURE: "private"
+      PAPERCLIP_PUBLIC_URL: "https://paperclip.workflowapi.com.br"
+      PAPERCLIP_ALLOWED_HOSTNAMES: "paperclip.workflowapi.com.br,paperclip_paperclip,hermes_hermes,openclaw,paperclip,localhost,127.0.0.1"
+      BETTER_AUTH_SECRET: "${BETTER_AUTH_SECRET:-change-me-in-production}"
+      OPENCLAW_AGENT_NAME: "Hagamenon"
+      OPENCLAW_WEBHOOK_URL: "http://openclaw-gateway:8080/webhook"
+      OPENCLAW_WEBHOOK_AUTH: "Bearer 857853cececf70b53f53289e9655a132aaef6b5082c8b049"
+      GLM_API_KEY: "b05ce19b5b4d4ab9b3e70754fbb6ea14.rfjfXbXBG4k5hSjT"
+      GLM_BASE_URL: "https://api.z.ai/api/coding/paas/v4"
+      NVIDIA_API_KEY: "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"
+    volumes:
+      - paperclip-data:/paperclip
+    deploy:
+      replicas: 1
+      placement:
+        constraints:
+          - node.role == manager
+      labels:
+        - "traefik.enable=true"
+        - "traefik.http.routers.paperclip.rule=Host(paperclip.workflowapi.com.br)"
+        - "traefik.http.routers.paperclip.entrypoints=websecure"
+        - "traefik.http.routers.paperclip.tls=true"
+        - "traefik.http.routers.paperclip.tls.certresolver=letsencrypt"
+        - "traefik.http.services.paperclip.loadbalancer.server.port=3100"
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+
+networks:
+  internal_network:
+    external: true
+
+volumes:
+  paperclip-data:
+    driver: local
