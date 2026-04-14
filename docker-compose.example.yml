@@ -1,0 +1,35 @@
+services:
+  paperclip:
+    image: ${PAPERCLIP_IMAGE}
+    container_name: paperclip
+    restart: unless-stopped
+    ports:
+      - "3100:3100"
+    env_file:
+      - .env
+    environment:
+      NODE_ENV: production
+      HOME: /paperclip
+      HOST: 0.0.0.0
+      PORT: ${PORT}
+      SERVE_UI: "true"
+      PAPERCLIP_HOME: ${PAPERCLIP_HOME}
+      PAPERCLIP_INSTANCE_ID: ${PAPERCLIP_INSTANCE_ID}
+      PAPERCLIP_CONFIG: ${PAPERCLIP_CONFIG}
+      PAPERCLIP_DEPLOYMENT_MODE: ${PAPERCLIP_DEPLOYMENT_MODE}
+      PAPERCLIP_DEPLOYMENT_EXPOSURE: ${PAPERCLIP_DEPLOYMENT_EXPOSURE}
+      DATABASE_URL: ${DATABASE_URL}
+      BETTER_AUTH_SECRET: ${BETTER_AUTH_SECRET}
+      PAPERCLIP_AGENT_JWT_SECRET: ${PAPERCLIP_AGENT_JWT_SECRET}
+      PAPERCLIP_API_URL: ${PAPERCLIP_API_URL}
+      HERMES_HOME: ${HERMES_HOME}
+    volumes:
+      - paperclip_data:/paperclip
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3100"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+volumes:
+  paperclip_data:
