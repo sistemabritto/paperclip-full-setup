@@ -1220,6 +1220,17 @@ export function issueService(db: Db) {
       if (!issueCompany) throw notFound("Issue not found");
       await assertAssignableAgent(issueCompany.companyId, agentId);
 
+        if (checkoutRunId) {
+          const runExists = await db
+            .select({ id: heartbeatRuns.id })
+            .from(heartbeatRuns)
+            .where(eq(heartbeatRuns.id, checkoutRunId))
+            .then((rows) => rows[0] ?? null);
+          if (!runExists) {
+            checkoutRunId = null;
+          }
+        }
+
       const now = new Date();
       const sameRunAssigneeCondition = checkoutRunId
         ? and(
