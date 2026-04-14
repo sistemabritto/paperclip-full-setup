@@ -1221,13 +1221,18 @@ export function issueService(db: Db) {
       await assertAssignableAgent(issueCompany.companyId, agentId);
 
         if (checkoutRunId) {
-          const runExists = await db
-            .select({ id: heartbeatRuns.id })
-            .from(heartbeatRuns)
-            .where(eq(heartbeatRuns.id, checkoutRunId))
-            .then((rows) => rows[0] ?? null);
-          if (!runExists) {
+          const isUuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(checkoutRunId);
+          if (!isUuid) {
             checkoutRunId = null;
+          } else {
+            const runExists = await db
+              .select({ id: heartbeatRuns.id })
+              .from(heartbeatRuns)
+              .where(eq(heartbeatRuns.id, checkoutRunId))
+              .then((rows) => rows[0] ?? null);
+            if (!runExists) {
+              checkoutRunId = null;
+            }
           }
         }
 
